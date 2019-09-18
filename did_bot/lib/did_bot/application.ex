@@ -6,9 +6,12 @@ defmodule DidBot.Application do
   use Application
 
   def start(_type, _args) do
+    import Supervisor.Spec, warn: false
+
+    slack_token = System.fetch_env!("SLACK_TOKEN")
+  
     children = [
-      # Starts a worker by calling: DidBot.Worker.start_link(arg)
-      # {DidBot.Worker, arg}
+      worker(Slack.Bot, [DidBot.SlackBot, [], slack_token])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
